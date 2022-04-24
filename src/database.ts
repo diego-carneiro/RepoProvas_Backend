@@ -1,4 +1,4 @@
 import pkg from "@prisma/client";
 
 const { PrismaClient } = pkg;
-export const prima = new PrismaClient();
+export const prisma = new PrismaClient();
