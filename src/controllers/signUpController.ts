@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { emailFinder } from "../repositories/userRepository";
+import { emailFinder } from "../repositories/signUpRepository";
 
 export async function signUp(
     req: Request,

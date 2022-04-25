@@ -1,9 +1,8 @@
-import { prisma } from "../database";
+import { prisma } from '../database.js';
+import { User } from '@prisma/client';
 
-export async function emailFinder(email: string){
-    const search = await prisma.user.findMany({
-        where: { email },
-    });
+type UserData = Omit<User, 'id'>;
 
-    return search;
+export async function register(userData: UserData) {
+  await prisma.user.create({ data: userData });
 }
