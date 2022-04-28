@@ -1,24 +1,17 @@
-import { prisma } from '../database.js';
 import { User } from '@prisma/client';
 import { returnError } from "../middlewares/errorHandlerMiddleware.js"
-import * as userRepository from "../repositories/userRepository"
-import bcrypt from 'bcrypt';
+import userRepository from "../repositories/userRepository.js"
+import bcrypt from "bcrypt";
 
-type SignUp = Omit<User, 'id'>;
+type CreateUserData = Omit<User, 'id'>;
 
-export async function create(signUpInfo: SignUp) {
-  const searchedUser = await prisma.user.findFirst({
-    where: {
-      email: signUpInfo.email
-    }
-  });
+export default async function createUser(signUpInfo: CreateUserData) {
+  const searchedUser = await userRepository.findByEmail(signUpInfo.email);
 
-  if (searchedUser) {
-    throw returnError;
-  }
+  if (searchedUser) throw returnError;
 
   const passwordHash = bcrypt.hashSync(signUpInfo.password, 10);
-  const userData = { ...signUpInfo, password: passwordHash };
 
-  userRepository.register(userData);
+  userRepository.register({ ...signUpInfo, password: passwordHash });
 }
+
