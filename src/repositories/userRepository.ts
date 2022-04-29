@@ -1,23 +1,29 @@
-import { prisma } from '../database.js';
-import { User } from '@prisma/client'; 
+import { prisma } from "../database.js";
+import { CreateUserData } from "../services/userService.js";
 
-type UserData = Omit<User, 'id'>;
-
-async function register(userData: UserData) {
-  await prisma.user.create({ 
-    data: userData,
+async function findById(id: number) {
+  return prisma.user.findUnique({
+    where: {
+      id,
+    },
   });
 }
-
-async function findByEmail(email: string){
+async function findByEmail(email: string) {
   return prisma.user.findUnique({
     where: {
       email,
-    }
-  })
+    },
+  });
 }
 
-export default { 
-  register,
-  findByEmail,
+async function insert(createUserData: CreateUserData) {
+  return prisma.user.create({
+    data: createUserData,
+  });
 }
+
+export default {
+  findByEmail,
+  findById,
+  insert,
+};
