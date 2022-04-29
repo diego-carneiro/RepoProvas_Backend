@@ -5,14 +5,10 @@ export default function validateSchemaMiddleware(
     schema: ObjectSchema
 ) {
     return (req: Request, res: Response, next: NextFunction) => {
-        const content = req.body;
-        const validation = schema.validate(content);
-
+        const validation = schema.validate(req.body);
         if (validation.error) {
-            throw { type: "Something went wrong.", message: validation.error}
+           return res.status(422).send({ error: validation.error.message });
         }
-
-        res.locals.content = validation.value;
 
         next();
     }

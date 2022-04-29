@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { returnError } from "../middlewares/errorHandlerMiddleware.js"
+import  from "../middlewares/errorHandlerMiddleware.js"
 import userRepository from "../repositories/userRepository"
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
