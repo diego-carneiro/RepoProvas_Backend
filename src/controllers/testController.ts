@@ -8,7 +8,6 @@ async function find(
   const { groupBy } = req.query as { groupBy: string };
 
   if (groupBy !== "disciplines" && groupBy !== "teachers") {
-    console.log("erro aqui");
 
     return res.sendStatus(400);
   }

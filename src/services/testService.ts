@@ -1,6 +1,6 @@
 import testRepository from "../repositories/testRepository.js";
 import categoryRepository from "../repositories/categoryRepository.js";
-import teacherDisciplineRepository from "../repositories/teacherDisciplineRepository.js";
+import * as teacherRepository from "../repositories/teacherDisciplineRepository.js";
 import { Test } from "@prisma/client";
 
 interface Filter {
@@ -22,7 +22,7 @@ async function createTest(infos: CreateTest) {
 
   if (!categoriesInfos) throw { type: "conflict" }
 
-  const teacherDisciplineInfos = await teacherDisciplineRepository.findTeacherDisciplineById(infos.teacherDisciplineId);
+  const teacherDisciplineInfos = await teacherRepository.findTeacherDisciplineById(infos.teacherDisciplineId);
 
   if (!teacherDisciplineInfos) throw { type: "conflict" }
 
