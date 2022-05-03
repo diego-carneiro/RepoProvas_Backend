@@ -1,8 +1,13 @@
 import testRepository from "../repositories/testRepository.js";
+import categoryRepository from "../repositories/categoryRepository.js";
+import teacherDisciplineRepository from "../repositories/teacherDisciplineRepository.js";
+import { Test } from "@prisma/client";
 
 interface Filter {
   groupBy: "disciplines" | "teachers";
 }
+
+export type CreateTest = Omit<Omit<Test, "id">, "views">;
 
 async function find(filter: Filter) {
   if (filter.groupBy === "disciplines") {
@@ -12,6 +17,19 @@ async function find(filter: Filter) {
   }
 }
 
+async function createTest(infos: CreateTest) {
+  const categoriesInfos = await categoryRepository.findCategoryById(infos.categoryId);
+
+  if (!categoriesInfos) throw { type: "conflict" }
+
+  const teacherDisciplineInfos = await teacherDisciplineRepository.findTeacherDisciplineById(infos.teacherDisciplineId);
+
+  if (!teacherDisciplineInfos) throw { type: "conflict" }
+
+  await testRepository.createTest(infos);
+}
+
 export default {
   find,
+  createTest
 };

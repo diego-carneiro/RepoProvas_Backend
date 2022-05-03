@@ -1,9 +1,10 @@
 import { prisma } from "../database.js";
+import { CreateTest } from "../services/testService.js"
 
 async function getTestsByDiscipline() {
   return prisma.term.findMany({
     include: {
-      disciplines: {
+      discipline: {
         include: {
           teacherDisciplines: {
             include: {
@@ -35,7 +36,21 @@ async function getTestsByTeachers() {
   });
 }
 
+async function findAllTests() {
+  const infos = await prisma.test.findMany();
+
+  return infos;
+}
+
+async function createTest(infos: CreateTest) {
+  await prisma.test.create({
+    data: infos
+  })
+}
+
 export default {
   getTestsByDiscipline,
   getTestsByTeachers,
+  findAllTests,
+  createTest
 };
