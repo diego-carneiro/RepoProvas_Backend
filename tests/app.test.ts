@@ -2,7 +2,6 @@ import app from "../src/app.js"
 import supertest from "supertest";
 import { prisma } from "../src/database.js";
 import { faker } from "@faker-js/faker";
-import { CreateUserData } from "../src/services/userService.js"
 import userInputFactory from "./factories/userInputFactory.js";
 
 describe("User POST /register", () => {
@@ -12,7 +11,7 @@ describe("User POST /register", () => {
   it("Must return 201 and persist session given a valid body", async () => {
     const body = userInputFactory();
 
-    const result = await supertest(app).post("/register").send(body);
+    const result = await supertest(app).post("/sign-up").send(body);
     const user = await prisma.user.findUnique({
       where: {
         email: body.email
@@ -25,15 +24,15 @@ describe("User POST /register", () => {
   it("Must return 422 given an invalid body", async () => {
     const body = {}
 
-    const response = await supertest(app).post("/register").send(body);
+    const response = await supertest(app).post("/sign-up").send(body);
     expect(response.status).toEqual(422);
   });
 
   it("Must return 409 given a duplicate email", async () => {
     const body = userInputFactory();
 
-    await supertest(app).post("/register").send(body);
-    const errorSource = await supertest(app).post("/register").send(body);
+    await supertest(app).post("/sign-up").send(body);
+    const errorSource = await supertest(app).post("/sign-up").send(body);
     const user = await prisma.user.findMany({
       where: {
         email: body.email
